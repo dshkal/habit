@@ -24,6 +24,7 @@ dependencies:
   cloud_firestore: ^0.12.9+5
   google_sign_in: ^4.0.0
   flutter_bloc: ^2.0.0
+  bloc: 2.0.0
   equatable: ^1.0.0
   meta: ^1.1.6
 
