@@ -20,6 +20,7 @@ class _LoginFormState extends State<LoginForm> {
   final TextEditingController _passwordController = TextEditingController();
 
   LoginBloc _loginBloc;
+  FocusNode _passwordFocusNode;
 
   UserRepository get _userRepository => widget._userRepository;
 
@@ -33,6 +34,7 @@ class _LoginFormState extends State<LoginForm> {
   void initState() {
     super.initState();
     _loginBloc = BlocProvider.of<LoginBloc>(context);
+    _passwordFocusNode = FocusNode();
     _emailController.addListener(_onEmailChanged);
     _passwordController.addListener(_onPasswordChanged);
   }
@@ -162,10 +164,14 @@ class _LoginFormState extends State<LoginForm> {
                                     borderSide: BorderSide(color: Theme.of(context).primaryColorDark),
                                   )
                                 ),
+                                textInputAction: TextInputAction.next,
+                                onFieldSubmitted: (_) {
+                                  FocusScope.of(context).requestFocus(_passwordFocusNode);
+                                },
                                 autovalidate: false,
                                 autocorrect: false,
                                 validator: (_) {
-                                  return !state.isEmailValid ? 'Invalid Email' : null;
+                                  return !state.isEmailValid ? 'Invalid Password' : null;
                                 },
                               ),
                             ),
@@ -191,6 +197,7 @@ class _LoginFormState extends State<LoginForm> {
                             Expanded(
                               child: TextFormField(
                                 controller: _passwordController,
+                                focusNode: _passwordFocusNode,
                                 decoration: InputDecoration(
                                   hintText: 'Type here...',
                                   contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 10,),
@@ -204,6 +211,10 @@ class _LoginFormState extends State<LoginForm> {
                                 obscureText: true,
                                 autovalidate: false,
                                 autocorrect: false,
+                                textInputAction: TextInputAction.done,
+                                onFieldSubmitted: (_) {
+                                  _onFormSubmitted(state);
+                                },
                                 validator: (_) {
                                   return !state.isPasswordValid ? 'Invalid Password' : null;
                                 },
@@ -325,6 +336,7 @@ class _LoginFormState extends State<LoginForm> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _passwordFocusNode.dispose();
     super.dispose();
   }
 
@@ -340,7 +352,20 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  void _onFormSubmitted() {
+  void _onFormSubmitted(LoginState state) {
+    if (!isLoginButtonEnabled(state)) {
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text(!state.isEmailValid ? 'Incorrect email' : !state.isPasswordValid ? 'Incorrect password' : 'SOmething went wrong'),
+            Icon(Icons.error),
+          ],
+        ),
+        backgroundColor: Colors.red,
+      ));
+      return;
+    }
     _loginBloc.add(
       LoginWithCredentialsPressed(
         email: _emailController.text,
