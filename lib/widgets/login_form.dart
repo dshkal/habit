@@ -256,8 +256,9 @@ class _LoginFormState extends State<LoginForm> {
                               color: Theme.of(context).primaryColorDark.withOpacity(0.5),
                             ),
                           ),
-                          SizedBox(height: 15,),
+                          SizedBox(height: 25,),
                           Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               Material(
                                 color: Colors.transparent,
@@ -265,8 +266,47 @@ class _LoginFormState extends State<LoginForm> {
                                   onTap: () {},
                                   child: SvgPicture.asset('assets/google.svg'),
                                 ),
-                              )
+                              ),
+                              SizedBox(width: 40,),
+                              Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  onTap: () {},
+                                  child: SvgPicture.asset('assets/facebook.svg'),
+                                ),
+                              ),
+                              SizedBox(width: 40,),
+                              Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  onTap: () {},
+                                  child: SvgPicture.asset('assets/twitter.svg'),
+                                ),
+                              ),
                             ],
+                          ),
+                          SizedBox(height: 45,),
+                          Text(
+                            'Don’t have account yet? ',
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColorDark,
+                              fontSize: 14,
+                            ),
+                          ),
+                          SizedBox(height: 5,),
+                          Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: () {},
+                              splashColor: Theme.of(context).primaryColor.withOpacity(0.1),
+                              child: Text(
+                                'Let’s register you',
+                                style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                  fontSize: 14,
+                                )
+                              ),
+                            ),
                           ),
                         ],
                       ),
